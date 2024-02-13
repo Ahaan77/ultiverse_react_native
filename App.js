@@ -1,20 +1,47 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import Auth from './Pages/Auth';
+import { useState } from 'react';
+import AppContext from './AppContext';
+import Loading from './Pages/Loading';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-export default function App() {
+const Stack = createNativeStackNavigator(); //Stack Management
+
+const App = () => {
+
+  const [loading, setLoading] = useState(false) //Loader Context
+
+  const contextObj = {
+    loading,
+    setLoading
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AppContext.Provider value={contextObj} >
+      {/* <ImageBackground style={tw`absolute h-full w-full border z-90`} source={image} resizeMode="cover"> */}
+      
+      {/* {!loading && <Auth />}
+        {loading && <Loading />} */}
+      <NavigationContainer>
+        
+        <Stack.Navigator screenOptions={{
+          headerShown: false
+        }}>
+          <Stack.Screen
+            name="Login"
+            component={Auth}
+          />
+          <Stack.Screen
+            name="Loading"
+            component={Loading}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+      {/* </ImageBackground> */}
+    </AppContext.Provider>
   );
+
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App
+
